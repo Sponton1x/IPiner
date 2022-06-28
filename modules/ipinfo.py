@@ -1,15 +1,17 @@
-#/usr/bin/python
-
 import requests
 import sys
-import typer
+import argparse
 from modules.colors import bcolors
 
-app = typer.Typer()
+def get_arguments():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-t", "--target", dest="target", help="Sepcify target ip or ip range")
+    options = parser.parse_args()
+    return options
 
-@app.command("getIp")
-def getIp(
-    ip: str = typer.Option(..., help="ip.")):
+options = get_arguments()
+
+def getIp(ip):
     url = f"https://ipinfo.io/{ip}/json"
     resp = requests.get(url=url)
     data = resp.json()
@@ -35,4 +37,5 @@ def getIp(
     else:
         print(f"{bcolors.FAIL}error")
 
-app()
+target = options.target
+getIp(target)

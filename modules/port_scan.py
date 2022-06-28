@@ -1,16 +1,16 @@
 #/usr/bin/python
 
 import socket
-import typer
+import scapy.all as scapy
+import argparse
+
+def get_arguments():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-ip", "--ip", dest="ip", help="Sepcify target ip or ip range")
+    options = parser.parse_args()
+    return  options
 
 
-@app.command("getPort")
-def portScanner(port: int = typer.Option(..., "--port"), host: str = typer.Option(..., "--host")):
-    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    s.settimeout(5)
-    if s.connect_ex((host, port)):
-        print("The port is closed")
-    else:
-        print("The port is open")
-
-app()
+options = get_arguments()
+result_list = scan(options.target)
+print_result(result_list)
